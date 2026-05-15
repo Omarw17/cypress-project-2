@@ -7,7 +7,6 @@ async function setupNodeEvents(on: any, config: any) {
     await addCucumberPreprocessorPlugin(on, config);
     on('file:preprocessor', createBundler({
         plugins: [createEsbuildPlugin(config)],
-        platform: 'node',
     }));
     return config;
 }
