@@ -1,92 +1,51 @@
-/**
- * Product POM Class
- * Handles product listing, filtering, and product detail interactions
- */
-
-export class ProductPOM {
-  // Product listing selectors
-  productContainer = '.product-item';
-  productTitle = '.product-title';
-  productPrice = '.product-price';
-  productImage = '.product-image';
-  addToCartButton = 'button:contains("Add to cart")';
-  filterByCategory = 'a[data-category]';
-  filterByPrice = 'input[name="price"]';
-  sortDropdown = 'select[name="sort"]';
-  productCount = '.product-count';
-  noProductsMessage = '.no-products';
-
-  // Product detail selectors
-  productDetailTitle = '.product-detail-title';
-  productDetailPrice = '.product-detail-price';
-  productDetailDescription = '.product-detail-description';
-  productRating = '.product-rating';
-  productReviews = '.product-reviews';
-  quantityInput = 'input[name="quantity"]';
-  addToCartDetailButton = 'button[id="add-to-cart"]';
-  backButton = 'a[href="/products"]';
-
-  // Filter and sort methods
-  filterByCategory(category) {
-    cy.get(`a[data-category="${category}"]`).click();
-  }
-
-  sortByPrice(sortOption) {
-    cy.get(this.sortDropdown).select(sortOption);
-  }
-
-  filterByPriceRange(minPrice, maxPrice) {
-    cy.get('input[name="minPrice"]').clear().type(minPrice);
-    cy.get('input[name="maxPrice"]').clear().type(maxPrice);
-  }
-
-  // Product interaction methods
-  clickProduct(productIndex) {
-    cy.get(this.productContainer).eq(productIndex).click();
-  }
-
-  clickProductByName(productName) {
-    cy.get(this.productTitle).contains(productName).parent().click();
-  }
-
-  addProductToCart(productIndex) {
-    cy.get(this.productContainer).eq(productIndex).within(() => {
-      cy.get(this.addToCartButton).click();
-    });
-  }
-
-  setQuantity(quantity) {
-    cy.get(this.quantityInput).clear().type(quantity);
-  }
-
-  clickAddToCartFromDetail() {
-    cy.get(this.addToCartDetailButton).click();
-  }
-
-  addToCartWithQuantity(quantity) {
-    this.setQuantity(quantity);
-    this.clickAddToCartFromDetail();
-  }
-
-  // Verification methods
-  verifyProductsDisplayed() {
-    cy.get(this.productContainer).should('have.length.greaterThan', 0);
-  }
-
-  verifyNoProductsMessage() {
-    cy.get(this.noProductsMessage).should('be.visible');
-  }
-
-  verifyProductDetailVisible() {
-    cy.get(this.productDetailTitle).should('be.visible');
-    cy.get(this.productDetailPrice).should('be.visible');
-  }
-
-  verifyProductPrice(expectedPrice) {
-    cy.get(this.productDetailPrice).should('contain', expectedPrice);
-  }
-
-  getProductCount() {
-    return cy.get(this.productContainer).length;
-  }
+class ProductPOM
+{
+    verifyProductsDisplayed(){
+        cy.get('[data-test="product-name"]').should('have.length.greaterThan', 0);
+        cy.verifyVisible('.card');
+        cy.get('body').should('not.contain', 'No products found');
+    }
+    verifyNoProductsMessage(){
+        cy.get('body').should('contain', 'No results found');
+        cy.get('[data-test="product-name"]').should('not.exist');
+        cy.get('.card').should('not.exist');
+    }
+    clickProduct(index){
+        cy.get('[data-test="product-name"]').eq(index).click();
+    }
+    clickProductByName(productName){
+        cy.contains(productName).click();
+    }
+    addProductToCart(index){
+        cy.get('[data-test="product-name"]').eq(index).click();
+        cy.clickElement('[data-test="add-to-cart"]');
+        cy.go('back');
+    }
+    setQuantity(quantity){
+        cy.fillField('[data-test="quantity"]', quantity);
+    }
+    clickAddToCartFromDetail(){
+        cy.clickElement('[data-test="add-to-cart"]');
+    }
+    addToCartWithQuantity(quantity){
+        cy.fillField('[data-test="quantity"]', quantity);
+        cy.clickElement('[data-test="add-to-cart"]');
+    }
+    filterByCategory(category){
+        cy.contains(category).click();
+        cy.verifyVisible('.card');
+    }
+    sortByPrice(sortOption){
+        const map = { 'low-to-high':'price,asc', 'high-to-low':'price,desc' };
+        cy.get('[data-test="sort"]').select(map[sortOption] || sortOption);
+    }
+    verifyProductDetailVisible(){
+        cy.verifyVisible('[data-test="product-name"]');
+        cy.verifyVisible('[data-test="unit-price"]');
+        cy.get('[data-test="add-to-cart"]').should('exist');
+    }
+    verifyProductPrice(price){
+        cy.verifyText('[data-test="unit-price"]', price);
+    }
 }
+export default ProductPOM

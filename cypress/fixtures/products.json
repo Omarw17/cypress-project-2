@@ -1,0 +1,14 @@
+{
+  "searchTerm": "Pliers",
+  "invalidSearchTerm": "NonexistentProduct12345",
+  "categories": ["Hand Tools", "Power Tools", "Other"],
+  "sortOptions": {
+    "lowToHigh": "price,asc",
+    "highToLow": "price,desc",
+    "alphabetically": "name,asc"
+  },
+  "couponCode": "SAVE10",
+  "sampleProduct": {
+    "index": 0
+  }
+}

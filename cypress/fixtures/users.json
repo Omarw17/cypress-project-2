@@ -1,0 +1,23 @@
+{
+  "validUser": {
+    "email": "customer@practicesoftwaretesting.com",
+    "password": "welcome01",
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "adminUser": {
+    "email": "admin@practicesoftwaretesting.com",
+    "password": "welcome01"
+  },
+  "invalidUser": {
+    "email": "invalid@example.com",
+    "password": "WrongPass123"
+  },
+  "newUser": {
+    "firstName": "John",
+    "lastName": "Test",
+    "email": "johntest999@example.com",
+    "password": "Test@1234"
+  },
+  "existingEmail": "customer@practicesoftwaretesting.com"
+}
