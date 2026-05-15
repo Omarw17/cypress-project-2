@@ -1,0 +1,19 @@
+{
+  "name": "practicesoftwaretesting-cypress",
+  "version": "1.0.0",
+  "description": "Cypress E2E test suite for practicesoftwaretesting.com",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:headed": "cypress run --headed --no-exit"
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "cypress": "^13.6.0",
+    "ts-loader": "^9.5.7"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": "cypress/support/step_definitions/**/*.js"
+  }
+}

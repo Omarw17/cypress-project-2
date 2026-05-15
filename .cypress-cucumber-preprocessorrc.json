@@ -1,0 +1,6 @@
+{
+  "stepDefinitions": "cypress/support/step_definitions/**/*.{js,ts}",
+  "html": {
+    "outputPath": "cypress/reports/cucumber-report.html"
+  }
+}
