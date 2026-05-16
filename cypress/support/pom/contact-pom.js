@@ -4,7 +4,7 @@ class ContactPOM {
         cy.get('[data-test="first-name"]', { timeout: 10000 }).should('be.visible').clear().type(firstName);
         cy.get('[data-test="last-name"]').clear().type(lastName);
         cy.get('[data-test="email"]').clear().type(email);
-        cy.get('[data-test="subject"]').select(subject);
+        cy.get('[data-test="subject"]', { timeout: 10000 }).should('be.visible').select(subject);
         cy.get('[data-test="message"]').clear().type(message);
         this.clickSubmit();
     }
