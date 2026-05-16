@@ -4,7 +4,7 @@ Feature: Contact Form Submission
     Given I navigate to the contact page
 
   Scenario: Submit contact form with valid data
-    When I fill contact form "John", "Doe", "john@example.com", "Customer service", "I need help with my order"
+    When I fill contact form "John", "Doe", "john@example.com", "customer-service", "I need help with my order. Please contact me as soon as possible to resolve this issue."
     Then I should see contact form success message
     And URL should contain "contact"
     And I should see "Contact" text

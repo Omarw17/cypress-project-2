@@ -1,8 +1,17 @@
 Cypress.Commands.add('login', (email, password) => {
-    cy.visit('/auth/login');
-    cy.fillField('[data-test="email"]', email);
-    cy.fillField('[data-test="password"]', password);
-    cy.clickElement('[data-test="login-submit"]');
+    // Use API login to avoid UI rate-limiting and account lockouts
+    cy.request({
+        method: 'POST',
+        url: 'https://api.practicesoftwaretesting.com/users/login',
+        body: { email, password },
+        failOnStatusCode: false,
+    }).then((response) => {
+        if (response.status === 200 && response.body.access_token) {
+            window.localStorage.setItem('token', response.body.access_token);
+        }
+    });
+    cy.visit('/account');
+    cy.get('[data-test="nav-menu"]', { timeout: 15000 }).should('be.visible');
 });
 
 Cypress.Commands.add('fillField', (selector, value) => {

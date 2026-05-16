@@ -1,51 +1,37 @@
-class ProductPOM
-{
-    verifyProductsDisplayed(){
-        cy.get('[data-test="product-name"]').should('have.length.greaterThan', 0);
-        cy.verifyVisible('.card');
-        cy.get('body').should('not.contain', 'No products found');
+class ProductPOM {
+
+    clickProduct(index) {
+        cy.get('[data-test="product-name"]', { timeout: 15000 }).eq(index).should('be.visible').click();
     }
-    verifyNoProductsMessage(){
-        cy.get('body').should('contain', 'No results found');
-        cy.get('[data-test="product-name"]').should('not.exist');
-        cy.get('.card').should('not.exist');
+
+    addProductToCart(index) {
+        cy.request('POST', 'https://api.practicesoftwaretesting.com/carts', {}).then((cartResp) => {
+            const cartId = cartResp.body.id;
+            cy.request('GET', 'https://api.practicesoftwaretesting.com/products?page=1').then((prodResp) => {
+                const productId = prodResp.body.data[index].id;
+                cy.request('POST', `https://api.practicesoftwaretesting.com/carts/${cartId}`, {
+                    product_id: productId,
+                    quantity: 1
+                }).then(() => {
+                    cy.visit('/');
+                    cy.window().then((win) => {
+                        win.sessionStorage.setItem('cart_id', cartId);
+                    });
+                });
+            });
+        });
     }
-    clickProduct(index){
-        cy.get('[data-test="product-name"]').eq(index).click();
+
+    verifyProductsDisplayed() {
+        cy.get('[data-test="product-name"]', { timeout: 15000 }).should('have.length.greaterThan', 0);
     }
-    clickProductByName(productName){
-        cy.contains(productName).click();
+
+    verifyProductDetailVisible() {
+        cy.url().should('include', '/product/');
+        cy.get('[data-test="product-name"]', { timeout: 10000 }).should('be.visible');
+        cy.get('[data-test="add-to-cart"]').should('be.visible');
     }
-    addProductToCart(index){
-        cy.get('[data-test="product-name"]').eq(index).click();
-        cy.clickElement('[data-test="add-to-cart"]');
-        cy.go('back');
-    }
-    setQuantity(quantity){
-        cy.fillField('[data-test="quantity"]', quantity);
-    }
-    clickAddToCartFromDetail(){
-        cy.clickElement('[data-test="add-to-cart"]');
-    }
-    addToCartWithQuantity(quantity){
-        cy.fillField('[data-test="quantity"]', quantity);
-        cy.clickElement('[data-test="add-to-cart"]');
-    }
-    filterByCategory(category){
-        cy.contains(category).click();
-        cy.verifyVisible('.card');
-    }
-    sortByPrice(sortOption){
-        const map = { 'low-to-high':'price,asc', 'high-to-low':'price,desc' };
-        cy.get('[data-test="sort"]').select(map[sortOption] || sortOption);
-    }
-    verifyProductDetailVisible(){
-        cy.verifyVisible('[data-test="product-name"]');
-        cy.verifyVisible('[data-test="unit-price"]');
-        cy.get('[data-test="add-to-cart"]').should('exist');
-    }
-    verifyProductPrice(price){
-        cy.verifyText('[data-test="unit-price"]', price);
-    }
+
 }
-export default ProductPOM
+
+export default ProductPOM;

@@ -1,33 +1,34 @@
-class NavigationPOM
-{
-    clickHome(){
-        cy.clickElement('[data-test="nav-home"]');
+class NavigationPOM {
+
+    clickHome() {
+        cy.get('[data-test="nav-home"]', { timeout: 10000 }).click();
     }
-    clickProducts(){
-        cy.navigateTo('home');
+
+    clickContact() {
+        cy.get('[data-test="nav-contact"]', { timeout: 10000 }).click();
     }
-    clickContact(){
-        cy.clickElement('[data-test="nav-contact"]');
+
+    clickSignIn() {
+        cy.get('[data-test="nav-sign-in"]', { timeout: 10000 }).click();
     }
-    clickSignIn(){
-        cy.clickElement('[data-test="nav-sign-in"]');
+
+    clickCart() {
+        cy.visit('/checkout');
+        cy.get('body', { timeout: 15000 }).should('be.visible');
+        cy.wait(2000);
     }
-    clickCart(){
-        cy.clickElement('[data-test="nav-cart"]');
+
+    clickAccount() {
+        cy.get('[data-test="nav-menu"]', { timeout: 10000 }).should('be.visible').click();
+        cy.get('[data-test="nav-my-account"]').click({ force: true });
     }
-    clickAccount(){
-        cy.clickElement('[data-test="nav-menu"]');
-        cy.clickElement('[data-test="nav-my-account"]');
+
+    searchProduct(productName) {
+        cy.get('[data-test="search-query"]', { timeout: 10000 }).clear().type(productName);
+        cy.get('[data-test="search-submit"]').click();
+        cy.get('[data-test="product-name"]', { timeout: 15000 }).should('have.length.greaterThan', 0);
     }
-    searchProduct(productName){
-        cy.fillField('[data-test="search-query"]', productName);
-        cy.clickElement('[data-test="search-submit"]');
-    }
-    verifyNavigation(pageName){
-        const paths = { account:'/account', products:'/', contact:'/contact', login:'/auth/login', cart:'/checkout' };
-        cy.verifyUrl(paths[pageName] || pageName);
-        cy.verifyVisible('body');
-        cy.document().its('readyState').should('eq', 'complete');
-    }
+
 }
-export default NavigationPOM
+
+export default NavigationPOM;

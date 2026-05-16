@@ -1,61 +1,33 @@
-class ContactPOM
-{
-    verifyContactPageVisible(){
-        cy.verifyUrl('/contact');
-        cy.verifyVisible('h3');
-        cy.get('[data-test="contact-submit"]').should('exist');
-    }
-    fillFirstName(firstName){
-        cy.fillField('[data-test="first-name"]', firstName);
-    }
-    fillLastName(lastName){
-        cy.fillField('[data-test="last-name"]', lastName);
-    }
-    fillEmail(email){
-        cy.fillField('[data-test="email"]', email);
-    }
-    fillPhone(phone){
-        cy.fillField('[data-test="phone"]', phone);
-    }
-    fillSubject(subject){
-        cy.fillField('[data-test="subject"]', subject);
-    }
-    fillMessage(message){
-        cy.fillField('[data-test="message"]', message);
-    }
-    selectCategory(category){
-        cy.get('[data-test="category"]').select(category);
-    }
-    clickSubmit(){
-        cy.clickElement('[data-test="contact-submit"]');
-    }
-    submitContactForm(firstName, lastName, email, subject, message){
-        this.fillFirstName(firstName);
-        this.fillLastName(lastName);
-        this.fillEmail(email);
-        this.fillSubject(subject);
-        this.fillMessage(message);
+class ContactPOM {
+
+    submitContactForm(firstName, lastName, email, subject, message) {
+        cy.get('[data-test="first-name"]', { timeout: 10000 }).should('be.visible').clear().type(firstName);
+        cy.get('[data-test="last-name"]').clear().type(lastName);
+        cy.get('[data-test="email"]').clear().type(email);
+        cy.get('[data-test="subject"]').select(subject);
+        cy.get('[data-test="message"]').clear().type(message);
         this.clickSubmit();
     }
-    submitFullContactForm(firstName, lastName, email, phone, category, subject, message){
-        this.fillFirstName(firstName);
-        this.fillLastName(lastName);
-        this.fillEmail(email);
-        this.fillPhone(phone);
-        this.selectCategory(category);
-        this.fillSubject(subject);
-        this.fillMessage(message);
-        this.clickSubmit();
+
+    clickSubmit() {
+        cy.get('[data-test="contact-submit"]', { timeout: 10000 }).should('be.visible').click();
     }
-    verifySuccessMessage(){
-        cy.verifyVisible('.alert-success');
-        cy.get('.alert-success').invoke('text').should('not.be.empty');
-        cy.verifyUrl('/contact');
+
+    verifyContactPageVisible() {
+        cy.url().should('include', '/contact');
+        cy.get('[data-test="contact-submit"]', { timeout: 10000 }).should('be.visible');
     }
-    verifyErrorMessage(){
-        cy.verifyVisible('.alert-danger, .help-block');
-        cy.get('.alert-danger, .help-block').should('not.be.empty');
-        cy.get('[data-test="contact-submit"]').should('exist');
+
+    verifySuccessMessage() {
+        cy.get('.alert-success', { timeout: 10000 }).should('be.visible')
+            .and('contain.text', 'Thanks for your message');
     }
+
+    verifyErrorMessage() {
+        cy.get('[data-test="first-name-error"], [data-test="last-name-error"], [data-test="email-error"], [data-test="subject-error"], [data-test="message-error"]', { timeout: 8000 })
+            .first().should('be.visible');
+    }
+
 }
-export default ContactPOM
+
+export default ContactPOM;

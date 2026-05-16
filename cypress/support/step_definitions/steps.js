@@ -5,6 +5,9 @@ import ProductPOM from '../pom/product-pom';
 import CartPOM from '../pom/cart-pom';
 import ContactPOM from '../pom/contact-pom';
 import AccountPOM from '../pom/account-pom';
+import SortPOM from '../pom/sort-pom';
+import CategoryPOM from '../pom/category-pom';
+import SearchPOM from '../pom/search-pom';
 
 const nav = new NavigationPOM();
 const auth = new AuthenticationPOM();
@@ -12,11 +15,15 @@ const product = new ProductPOM();
 const cart = new CartPOM();
 const contact = new ContactPOM();
 const account = new AccountPOM();
+const sort = new SortPOM();
+const category = new CategoryPOM();
+const search = new SearchPOM();
 
 Given('I navigate to the home page', () => {
     cy.visit('/');
     cy.get('body').should('be.visible');
     cy.document().its('readyState').should('eq', 'complete');
+    cy.get('[data-test="product-name"]', { timeout: 15000 }).should('have.length.greaterThan', 0);
 })
 
 Given('I navigate to the login page', () => {
@@ -141,6 +148,23 @@ Then('I should see order history', () => {
     account.verifyOrderHistoryVisible();
 })
 
+
+When('I sort products by {string}', (value) => {
+    sort.sortBy(value);
+})
+
+When('I click on hand tools category', () => {
+    category.clickHandTools();
+})
+
+When('I click on power tools category', () => {
+    category.clickPowerTools();
+})
+
+When('I click on other category', () => {
+    category.clickOther();
+})
+
 Then('I should see {string} text', (text) => {
     cy.contains(text).should('be.visible');
 })
@@ -150,3 +174,16 @@ Then('URL should contain {string}', (urlPart) => {
     cy.get('body').should('be.visible');
     cy.document().its('readyState').should('eq', 'complete');
 })
+
+When('I search for product {string}', (term) => {
+    search.searchFor(term);
+})
+
+Then('I should see search results', () => {
+    search.verifyResultsVisible();
+})
+
+Then('search results should contain {string}', (text) => {
+    search.verifyResultsContain(text);
+})
+

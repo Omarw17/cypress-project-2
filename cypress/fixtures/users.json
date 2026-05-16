@@ -1,13 +1,15 @@
 {
   "validUser": {
-    "email": "customer@practicesoftwaretesting.com",
-    "password": "welcome01",
-    "firstName": "Jane",
-    "lastName": "Doe"
+    "email": "alicecypress88@mailinator.com",
+    "password": "Cypress#Test88",
+    "firstName": "Alice",
+    "lastName": "Cypress"
   },
-  "adminUser": {
-    "email": "admin@practicesoftwaretesting.com",
-    "password": "welcome01"
+  "validUser2": {
+    "email": "bobcypress88@mailinator.com",
+    "password": "Cypress#Test88",
+    "firstName": "Bob",
+    "lastName": "Cypress"
   },
   "invalidUser": {
     "email": "invalid@example.com",
@@ -18,6 +20,5 @@
     "lastName": "Test",
     "email": "johntest999@example.com",
     "password": "Test@1234"
-  },
-  "existingEmail": "customer@practicesoftwaretesting.com"
+  }
 }

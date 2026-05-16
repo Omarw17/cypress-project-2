@@ -1,61 +1,40 @@
-class AuthenticationPOM
-{
-    fillEmail(email){
-        cy.fillField('[data-test="email"]', email);
+class AuthenticationPOM {
+
+    login(email, password) {
+        cy.get('[data-test="email"]').clear().type(email);
+        cy.get('[data-test="password"]').clear().type(password);
+        cy.get('[data-test="login-submit"]').click();
+        cy.get('body', { timeout: 10000 }).should('be.visible');
     }
-    fillPassword(password){
-        cy.fillField('[data-test="password"]', password);
+
+    fillEmail(email) {
+        cy.get('[data-test="email"]').clear().type(email);
     }
-    clickLogin(){
-        cy.clickElement('[data-test="login-submit"]');
+
+    fillPassword(password) {
+        cy.get('[data-test="password"]').clear().type(password);
     }
-    login(email, password){
-        cy.login(email, password);
+
+    clickLogin() {
+        cy.get('[data-test="login-submit"]').click();
     }
-    fillFirstName(firstName){
-        cy.fillField('[data-test="first-name"]', firstName);
+
+    verifySuccessMessage() {
+        cy.get('[data-test="nav-menu"]', { timeout: 15000 }).should('be.visible');
     }
-    fillLastName(lastName){
-        cy.fillField('[data-test="last-name"]', lastName);
+
+    verifyErrorMessage() {
+        cy.get('[data-test="login-error"]', { timeout: 10000 }).should('be.visible')
+            .and('contain.text', 'Invalid');
+        cy.url().should('include', '/auth/login');
     }
-    fillRegisterEmail(email){
-        cy.fillField('[data-test="email"]', email);
+
+    verifyLoginPageTitle() {
+        cy.url().should('include', '/auth/login');
+        cy.get('[data-test="login-submit"]').should('be.visible');
+        cy.get('h3').should('contain.text', 'Login');
     }
-    fillRegisterPassword(password){
-        cy.fillField('[data-test="password"]', password);
-    }
-    fillConfirmPassword(password){
-        cy.fillField('[data-test="confirm-password"]', password);
-    }
-    checkAgreeTerms(){
-        cy.get('[data-test="agree-terms"]').check();
-    }
-    clickRegister(){
-        cy.clickElement('[data-test="register-submit"]');
-    }
-    register(firstName, lastName, email, password){
-        this.fillFirstName(firstName);
-        this.fillLastName(lastName);
-        this.fillRegisterEmail(email);
-        this.fillRegisterPassword(password);
-        this.fillConfirmPassword(password);
-        this.checkAgreeTerms();
-        this.clickRegister();
-    }
-    verifyLoginPageTitle(){
-        cy.verifyUrl('/auth/login');
-        cy.verifyVisible('[data-test="login-submit"]');
-        cy.verifyVisible('h3');
-    }
-    verifySuccessMessage(){
-        cy.verifyUrl('account');
-        cy.verifyVisible('[data-test="nav-menu"]');
-        cy.get('body').should('not.contain', 'Invalid credentials');
-    }
-    verifyErrorMessage(){
-        cy.verifyVisible('.alert-danger');
-        cy.get('.alert-danger').should('not.be.empty');
-        cy.verifyUrl('/auth/login');
-    }
+
 }
-export default AuthenticationPOM
+
+export default AuthenticationPOM;

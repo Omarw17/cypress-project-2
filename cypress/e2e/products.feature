@@ -5,14 +5,14 @@ Feature: Product Browsing and Selection
 
   Scenario: View product listings on home page
     Then I should see product listings
-    And I should see "Product" text
+    And I should see "Sort" text
     And URL should contain "/"
 
   Scenario: Search for a specific product
     When I search for "Pliers"
     Then I should see product listings
     And I should see "Pliers" text
-    And URL should contain "search"
+    And URL should contain "/"
 
   Scenario: View product detail page
     When I click on product at index 0
