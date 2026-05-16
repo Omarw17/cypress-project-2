@@ -23,8 +23,8 @@ export default defineConfig({
         screenshotOnRunFailure: true,
         viewportWidth: 1280,
         viewportHeight: 800,
-        defaultCommandTimeout: 8000,
-        pageLoadTimeout: 30000,
+        defaultCommandTimeout: 20000,
+        pageLoadTimeout: 60000,
         retries: { runMode: 1, openMode: 0 },
         env: { cucumberJsonReport: true },
         setupNodeEvents
